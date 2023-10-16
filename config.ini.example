@@ -1,0 +1,7 @@
+[DEFAULT]
+OpenAIKey = < OpenAI Key >
+DiscordToken = < Discord Bot Token >
+TelegramToken = < Telegram Bot Token >
+AllowedDiscordSenders = < List of allowed Discord Users, comma seperated >
+AllowedDiscordChannels = < List of allowed Discord Channels, comma seperated >
+AllowedTelegramSenders = < List of allowed Telegram Senders, comma seperated >
