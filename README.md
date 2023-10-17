@@ -1,5 +1,5 @@
 # transcribe_bot
-Telegram or Discord bot that automatically transcribes audio messages
+Telegram or Discord bot that automatically transcribes audio messages based on OpenAI Whisper and ffmpeg.
 
 ## How to run it
 1. Install the requirements.txt
