@@ -1,0 +1,4 @@
+discord.py==2.3.2
+ffmpeg_python==0.2.0
+openai==1.27.0
+python-telegram-bot==21.1.1

@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 import ffmpeg
 import os
 import discord
@@ -12,9 +12,10 @@ Path("temp/").mkdir(parents=True, exist_ok=True)
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-openai.api_key = config['DEFAULT']['OpenAIKey'] # your OpenAI-API Key
-allowed_senders = config['DEFAULT']['AllowedDiscordSenders'].split(',') # list of allowed Discord accounts
-allowed_channel_names = config['DEFAULT']['AllowedDiscordChannels'].split(',') # allowed channel names
+openai = OpenAI(api_key=config['DEFAULT']['OpenAIKey'])  # initiate with your openai key
+allowed_senders = config['DEFAULT']['AllowedDiscordSenders'].split(',')  # list of allowed Discord accounts
+allowed_channel_names = config['DEFAULT']['AllowedDiscordChannels'].split(',')  # allowed channel names
+
 
 class TranscribeClient(discord.Client):
     async def on_ready(self):
@@ -35,13 +36,14 @@ class TranscribeClient(discord.Client):
 
                 # convert to mp3
                 input = ffmpeg.input('temp/in')
-                out = ffmpeg.output(input,'temp/out.mp3')
+                out = ffmpeg.output(input, 'temp/out.mp3')
                 ffmpeg.run(out, overwrite_output=True)
                 audio_file = open("temp/out.mp3", "rb")
 
                 # transcribe using OAI Whisper
-                transcript = openai.Audio.transcribe("whisper-1", audio_file)
-                text = transcript['text']
+                transcript = openai.audio.transcriptions.create(model="whisper-1", file=audio_file)
+
+                text = transcript.text
 
                 # respond with the transcription
                 await message.channel.send(f'**{attachment.filename}:**')
@@ -54,7 +56,7 @@ async def main():
     return
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     token = config['DEFAULT']['DiscordToken']
     intents = discord.Intents.default()
     intents.message_content = True
